@@ -17,15 +17,20 @@
     <div class="container">
       <div id="firstRow">
         <h1>chatterbox</h1>
-        <button onclick="refreshChats()">Refresh</button>
+        <!-- <button onclick="app.fetch()">Refresh</button> -->
       </div>
-      <div id="roomSelect"></div>
+      <div >
+        <select id="roomSelect"></select>
+      </div>
       <div id="userChat">
 
-        <form id="chatForm">
+        <!--<form id="chatForm">-->
+        <select id="userName">
+          <option value="userOne">User One</option>
+        </select>
           Chat about something!<input id="chatText" type="text">
-          <button onclick="writePost()">Submit</button>
-        </form>
+          <button onclick="app.send($('#chatText').val())">Submit</button>
+        <!--</form>-->
       </div>
       <div><span id="test"></span></div>
       <div id="chats"></div>

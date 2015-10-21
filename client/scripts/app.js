@@ -1,17 +1,5 @@
 // YOUR CODE HERE:
-//var username = prompt('What is your name?') || 'anonymous';
-var message = {
-  username: 'Mel Brooks',
-  text: 'It\'s good to be the king',
-  roomname: 'lobby'
-};
-var message2 = {
-  username: 'Mel Brooks',
-  text: 'Never underestimate the power of the Schwartz!',
-  roomname: 'lobby'
-};
 
-var chatCount = 0;
 
 var app = {
   addFriend: function(){
@@ -29,41 +17,37 @@ var app = {
     return $elem;
   },*/
   addRoom: function(room){
-    var div = '<div class="rooms">' + room + '</div>';
+    var div = '<option value="'+room+'" class="rooms">' + room + '</option>';
     $("#roomSelect").append(div);
   },
-  addMessage: function(message){
-    //look into turning anchor tags into buttons
-    var div = $('<div class="chats"></div>');
-    div.append(this.$userElem(message));
-    div.append(message.text);
-    $("#chats").append(div);
-  },
+  // addMessage: function(message){
+  //   //look into turning anchor tags into buttons
+  //   var div = $('<div class="chats"></div>');
+  //   /*div.append(this.$userElem(message));*/
+  //   div.append(message.text);
+  //   $("#chats").append(div);
+  // },
   clearMessages: function(){
     $("#chats").empty();
-  },
-  handleSubmit: function(){
-    /*var message = $('#message').val();
-    this.send(message);*/
-    //somehow handles submission
   },
   fetch: function(){
     $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: 'https://api.parse.com/1/classes/chatterbox',
     type: 'GET',
+    data: 'order=-createdAt',
     contentType: 'application/json',
     success: function (data) {
-      console.log('chatterbox: Message sent. Data: ', data);
-      /*for(var i = chatCount; i < chatCount+10; i++){
+      console.log('chatterbox: Messages recieved Data: ', data);
+      for(var i = app.chatCount; i < app.chatCount+10; i++){
         if(data.results[i].text !== undefined && data.results[i].text !== ''){
         var div = '<div class="chats">' + data.results[i].username + ':     ' + data.results[i].text + '</div>';
       } else if (data.results[i].message !== undefined){
         var div = '<div class="chats">' + data.results[i].username + ':     ' + data.results[i].message + '</div>';
       }
-        $("#chatters").append(div);
+        $("#chats").append(div);
+        app.chatCount+=1;
       }
-      chatCount+=10;*/
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -71,13 +55,20 @@ var app = {
       }
     });
   },
+  chatCount: 0,
   init: function(){
     /*$('#send .submit').submit(this.handleSubmit);*/
     //Call fetch
     app.fetch();
+    app.chatCount = 0;
     return true;
   },
-  send: function(message){
+  send: function(){
+    var message = {
+      username: $('#userName').val(),
+      text: $('#chatText').val(),
+      roomname: "lobby"
+    };
     $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: 'https://api.parse.com/1/classes/chatterbox',
@@ -95,10 +86,5 @@ var app = {
   }
 };
 
-
-var writePost = function(){
-
-
-  document.getElementById('chatForm').reset();
-};
+//setInterval(app.fetch, 6000);
 app.init();
